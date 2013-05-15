@@ -9,33 +9,21 @@
 
 ## Usage
 
-```js
-// Upload a single file
-$('single-link').click(function() {
-  require('file-picker')(function(files){});
-});
-
-// Upload multiple files
-$('multiple-link').click(function() {
-  require('file-picker')({ multiple: true }, function(files){});
-});
-```
+  See demo.
 
 ## API
 
-### filePicker(opts, fn)
+### new Filepicker()
 
-  Valid options:
+  Create new file picker.
 
-  - `multiple` (Boolean) whether the user can select multiple files
-    if the UA supports it (defaults to `false`).
+### Filepicker#multiple()
+  
+  Add support for multiple files selection.
 
-  The callback `fn` will only be invoked if the underlying `<input>`
-  fires a `change` event. It will receive the following parameters:
+### Filepicker#open(fn)
 
-  - The `files` array from the `<input>` (not available on IE9).
-  - The change `event` object.
-  - The underlying `<input>` element reference (detached from DOM).
+  Invoke `fn` on file selection.
 
 ## Browser support
 

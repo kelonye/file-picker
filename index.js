@@ -1,63 +1,51 @@
+/**
+  * Expose `Filepicker`
+  *
+  */
+
+module.exports = Filepicker;
 
 /**
- * Module exports.
- */
+  * Initialize a new `Filepicker`
+  * @api public
+  */
 
-module.exports = filePicker;
-
-/**
- * Reference to last `<input>` used.
- */
-
-var last;
-
-/**
- * Opens a file picker dialog.
- *
- * @param {Object} options (optional)
- * @param {Function} fn callback function
- * @api public
- */
-
-function filePicker(opts, fn){
-  if (last && last.parentNode) {
-    last.parentNode.removeChild(last);
-  }
-
-  if ('function' == typeof opts) {
-    fn = opts;
-    opts = {};
-  }
-  opts = opts || {};
-
-  // inject input element
+function Filepicker(){
   var input = document.createElement('input');
   input.type = 'file';
   input.style.top = '-100px';
   input.style.position = 'absolute';
-  last = input;
+  this.input = input;
+}
 
-  // multiple files support
-  if (opts.multiple) input.multiple = true;
+/**
+  * Can pick multiple files
+  * @api public
+  */
+Filepicker.prototype.multiple = function() {
+  this.input.multiple = true;
+  return this;
+};
 
-  // listen change event
-  input.addEventListener('change', function(ev){
-    fn(input.files, ev, input);
+/**
+  * Add picker to DOM
+  * and invoke fn(ev) on input change.
+  *
+  * @param {Function} fn
+  * @api public
+  */
+
+Filepicker.prototype.open = function(fn) {
+  var self = this;
+  this.input.addEventListener('change', function(ev){
+    document.body.removeChild(self.input);
+    fn.call(self, ev);
   });
-
-  // inject
-  document.body.appendChild(input);
-
-  // open dialog
+  document.body.appendChild(this.input);
   if (window.opera) {
     // opera hack
-    setTimeout(open, 0);
+    setTimeout(this.input.click, 0);
   } else {
-    open();
+    this.input.click();
   }
-
-  // open
-  function open(){
-    input.click();
-  }
-}
+};
